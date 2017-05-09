@@ -1,7 +1,17 @@
 body{background-color:white}
 #qlive-body{display:table;margin:0 auto;padding-top:40px;background-color:#f3f3f3;width:1080px}
 .layui-input-block{width:87%}
-.common-box{border:1px solid #c9c9c9;border-radius:1px;box-shadow:0 1px 2px #d3d3d3;background-color:#fcfcfc;width:1210px;    margin: 100px auto;}
+.common-box{
+	    border: 1px solid #c9c9c9;
+    border-radius: 1px;
+    box-shadow: 0 1px 2px #d3d3d3;
+    background-color: #fcfcfc;
+    margin: 0 auto;
+    display: block;
+    width: 1010px;
+    margin-left: 245px;
+    margin-top: 45px;
+}
 
 .layui-border-box-js{
     width: 100%;
