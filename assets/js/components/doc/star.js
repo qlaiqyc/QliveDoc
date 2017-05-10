@@ -16,9 +16,7 @@ PageInfo.register({
 			var Page 	= {};
 
 			Page.show = function() {
-
-				console.log("123");
-
+				 
 			};
 
 			return Page;

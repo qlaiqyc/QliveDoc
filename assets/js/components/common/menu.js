@@ -13,7 +13,7 @@ PageInfo.register({
 			buf.push('    <dl class="layui-nav-child">                                          ');
 			
 			buf.push('      <dd><a href="javascript:;" class="common-menu" data-type="index">结构目录</a></dd>                           ');
-			buf.push('      <dd><a href="javascript:;" class="common-menu" data-type="doc/start">start对象</a></dd>                           ');
+			buf.push('      <dd><a href="javascript:;" class="common-menu" data-type="doc/star">start对象</a></dd>                           ');
 			buf.push('      <dd><a href="javascript:;" class="common-menu" data-type="doc/role">role对象</a></dd>                           ');
 			buf.push('      <dd><a href="javascript:;" class="common-menu" data-type="doc/plug">plug对象</a></dd>                           ');
 			buf.push('      <dd><a href="javascript:;" class="common-menu" data-type="doc/main">main对象</a></dd>                           ');
