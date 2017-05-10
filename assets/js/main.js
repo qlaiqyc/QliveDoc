@@ -1,5 +1,3 @@
-"use strict";
-
 PageInfo.register({ "type": "Start", "info": function info() {
 
 		/**
@@ -22,11 +20,11 @@ PageInfo.register({ "type": "Start", "info": function info() {
 			flag: "hash",
 			list: {
 				"index": "/assets/js/components/index",
-				"doc/star": "/assets/js/components/doc/star"
+				"doc/star": "/assets/js/components/doc/star",
 				"doc/main": "/assets/js/components/doc/main",
 				"doc/plug": "/assets/js/components/doc/plug",
 				"doc/obj": "/assets/js/components/doc/obj",
-				"doc/role": "/assets/js/components/doc/role",
+				"doc/role": "/assets/js/components/doc/role"
 			}
 		};
 
@@ -52,4 +50,3 @@ PageInfo.register({ "type": "Start", "info": function info() {
 
 		return Start;
 	} });
-//# sourceMappingURL=main.js.map
