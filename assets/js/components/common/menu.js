@@ -4,7 +4,7 @@ PageInfo.register({
 
 		var HtmUtil = {};
 		
-		HtmUtil.common4Menu = function(data){
+		HtmUtil.common4Menu = function(){
 			var buf = [];
 			
 			buf.push('<ul class="layui-nav layui-nav-tree  layui-nav-side" lay-filter="test">   ');

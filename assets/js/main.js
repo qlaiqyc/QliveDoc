@@ -13,7 +13,8 @@ PageInfo.register({"type":"Start","info":function(){
 	var Start = {};
 	
 	Start.require = {
-		"$":"jquery"
+		"$":"jquery",
+		 "menu":"/assets/js/components/common/menu"
 	};
 	Start.Router ={
 	 	flag:"hash",
@@ -32,7 +33,20 @@ PageInfo.register({"type":"Start","info":function(){
 		"name":"QliveDoc"       //项目名称
 	};
 	 
-	Start.Pub = {
+	Start.Pub = function(){
+		
+		var HtmUtil = this.menu;
+		
+		$("body").append(HtmUtil.common4Menu());
+		
+		$("div.layui-nav-child").unbind("click").bind("click",function(){
+			var $a = $(this).find("a");
+			
+			console.log($a.data("type"));
+		
+		});
+		
+		 		
 	};
  	
  	return Start;
