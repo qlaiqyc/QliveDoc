@@ -1,10 +1,8 @@
 PageInfo.register({ "type": "Start", "info": function info() {
 
-		/**
+/**
    * 所有对象通过初始化进入 Start
-   * 
    * require: 需要哪些 外部引用
-   * 
    * Pub: 公共方法对象
    * Global: 此模块下全局遍历对象
    * Router : 路由对象 
@@ -43,7 +41,6 @@ PageInfo.register({ "type": "Start", "info": function info() {
 			$("dl.layui-nav-child dd").unbind("click").bind("click",function(){
 				var $a = $(this).find("a");
 				Funutil.common4openUrl({"url":$a.data("type")});
-			
 			});
 			
 		};

@@ -1,5 +1,5 @@
-body{background-color:white}
-#qlive-body{display:table;margin:0 auto;padding-top:40px;background-color:#f3f3f3;width:1080px}
+body{background-color:#f3f3f3}
+#qlive-body{display:table; background-color:#f3f3f3;width:100%}
 .layui-input-block{width:87%}
 .common-box{
 	    border: 1px solid #c9c9c9;
