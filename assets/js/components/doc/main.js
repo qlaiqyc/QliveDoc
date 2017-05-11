@@ -16,7 +16,7 @@ PageInfo.register({
 			var Page 	= {};
 
 			Page.show = function() {
-				 
+				
 			};
 
 			return Page;
