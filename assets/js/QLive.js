@@ -160,11 +160,11 @@
   		
  		var id4url = "until-open-url";
  		var $url   = $("#"+id4url);
- 			 
  			
  		if( $url.length <= 0)  $("body").append('<a style="color: #f6f6f6;"><span id="'+id4url+'" >a</span></a>');
  			
- 			$url  = $("#"+id4url);
+ 		$url  = $("#"+id4url);
+ 		
  		var $this = $url.closest("a");
  		
  		if(FunUtil.Global.Router) {
@@ -182,12 +182,9 @@
  			$this.attr("href",url).attr("target","_self");
  		}
  		
- 		
- 		
  		$url.click();
- 		setTimeout(function(){
- 			$this.remove();
- 		},200);
+ 		
+ 		setTimeout(function(){ $this.remove(); },200);
  	};
 	
 	/*
@@ -196,16 +193,28 @@
 	
 	FunUtil.common4cache = function(data){
 		var  execuFun = {};
-		var key = data.key;
-		var value = data.value;
+		var key 	= data.key;
+		var value 	= data.value;
+		var model	= data.model;
+		
+		if(!String.HasText(model)) model = "";
+		
 		execuFun.setItem = function(){
-			
-			sessionStorage.setItem(key,value);
+			if(model == "lo"){
+				localStorage.setItem(key,value);
+			}else{
+				sessionStorage.setItem(key,value);
+			}
 		};
 		
 		
 		execuFun.getItem = function(){
-			var str = sessionStorage.getItem(key);
+			var str  ="";
+			if(model == "lo"){
+				str = localStorage.getItem(key);
+			}else{
+				str = sessionStorage.getItem(key);
+			}
 			if(String.HasText(str)) str = JSON.parse(str);
 			return	str;
 		};
@@ -315,8 +324,6 @@
 			}
 		};
 		
-		
-		
 		fun4help.single = function(){
 			
 			/**
@@ -327,10 +334,7 @@
 				var keys 	= Object.keys(require);
 				var vals 	= Object.values(require);
 				var len 	= keys.length;
-				
-				var list = [];
-				
-				
+				var list 	= [];
 				
 				for(var i =0 ;i<len;i++) list.push(FunUtil.common4require(vals[i]));
 				 
@@ -344,10 +348,7 @@
 					Router.init();
 					Router.show();
 				});
-			
-			
 		};
-		
 		
 		fun4help.model = function(){
 			
@@ -478,10 +479,7 @@
 		
 		if(String.HasText(FunUtil.Global.Router)) fun4help.global.type = "model";
 		
-		
 		fun4help[fun4help.global.type]();
-		
-	
 	};
 	
 	//监听对象
@@ -490,7 +488,6 @@
 		
 		execuFun.pub = function(){
 			//刷新页面
-			  
 		};
 		
 		execuFun.hash = function(){
@@ -517,41 +514,69 @@
 			window.onhashchange = function(e){
 				//通过hash 值进行判断
 				ecfun();
-				
 			};
 			
 			if(String.HasText(FunUtil.Global.Router))	ecfun();
 		};
 		
-		
 		execuFun.history = function(){
-			
+		
 		};
 		
- 
-		
-		
 		execuFun[data.type]();
-		
- 
 	};
 	
 	/**
 	 * 
 	 * 按需加载异步请求js
-	
+	 * 判断是否缓存 根据打包值
 	 * 
 	 */
 	FunUtil.common4GetJS =   function(data){
-		var script	= document.createElement("script");
-		script.type	= "text/javascript";
-		script.src	= data.url;
-		String.HasText(data.async) ? data.async: (script.async="async");
-		if(String.HasText(data.type) && data.type == "head") {
-			document.head.appendChild(script);
-		}else{
-			document.body.appendChild(script);
+		
+		
+		var vnum = "0000";
+		try{
+			vnum = v4num;
+		}catch(e){
+			 vnum = "0000";
 		}
+		
+		var request = function(callback){
+			var xmlhttp = null ;
+			
+			if (window.XMLHttpRequest){
+				xmlhttp=new XMLHttpRequest();
+			}else if(window.ActiveXObject){
+				xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+			}
+		 
+			if (xmlhttp === null)  {alert("不支持咯"); return}; 
+			 
+			xmlhttp.onreadystatechange = function(){
+				 if (xmlhttp.readyState==4 && xmlhttp.status==200){
+					FunUtil.common4cache({"type":"set","key":xmlhttp.responseURL,"value":JSON.stringify({"vnum":vnum,"js":xmlhttp.responseText}),"model":"lo"});
+				 	callback();
+				 }
+			};
+				
+			xmlhttp.open("GET",data.url,true);//代表请求是否异步处理
+			xmlhttp.send(null);
+			
+		};
+		/* */
+		var callback = function(){
+		 	
+		 	var script	= document.createElement("script");
+			script.type	= "text/javascript";
+			script.src	= data.url;
+			String.HasText(data.async) ? data.async: (script.async="async");
+			if(String.HasText(data.type) && data.type == "head") {
+				document.head.appendChild(script);
+			}else{
+				document.body.appendChild(script);
+			}
+			
 	　　　　if(script.readyState){ 
 	　　　　　　script.onreadystatechange=function(){
 	　　　　　　　　if(script.readyState=='complete'||script.readyState=='loaded'){
@@ -566,6 +591,31 @@
 					script.remove();
 				}
 	　　　　};
+		 	
+		 	
+		 };
+		
+		if(String.HasText(FunUtil.Global.Router)) {
+			
+			
+			var ljs = FunUtil.common4cache({"type":"get","key":data.url,"model":"lo"});
+		
+			if(String.HasText(ljs)){
+				
+				
+				if(ljs.vnum == vnum) {
+					
+					eval(ljs.js);
+					data.callback();
+					
+					
+					return;
+				}
+			}
+			
+		}
+		
+		request(callback);
 	};
 	
 	FunUtil.common4require = function(str){
@@ -578,27 +628,21 @@
  		 *
 		 */
 		
-		
 		var result = new Promise(resolve => {
 		     
-		    var path = FunUtil.Global.config().paths;
-			var type = "foot";
-			
-			var loadJS = location.origin+"/"+location.pathname.split("/")[1]+str+".js";
-			//if(String.HasText(FunUtil.Global.Router))  loadJS = 
+		    var path	= FunUtil.Global.config().paths;
+			var type	= "foot";
+			var loadJS	= location.origin+"/"+location.pathname.split("/")[1]+str+".js";
+			var execuFun= {};
 			
 			if(FunUtil.common4Prop({"type":"isIN","in":str,"obj":path}))  {loadJS = path[str]; type="head"}
-			
-			var execuFun = {};
-		     
 		     
 		    var data = {"url":loadJS};
+		    
 			execuFun.head =   function(){
 				FunUtil.common4GetJS({"url":loadJS,"async":"async","callback":function(data){
-				
-				resolve(FunUtil.Global.plug);
-			}});
-				 
+					resolve(FunUtil.Global.plug);
+				}});
 			};
 			
 			execuFun.foot = function(){
@@ -616,9 +660,6 @@
 			  
 			  
 			execuFun[type]();
-		     
-		     
-		     
 		});
 		
 		
@@ -628,15 +669,11 @@
 	FunUtil.common4Router  = function(data){
 		//初始化 设置路由 信息
 		var router	= data;
-		
-		var flag 	= router.flag;
-		
-		var keys  = Object.keys(router.list);
-		var valus = Object.values(router.list);
-		var len	  = keys.length;
-		
-		
-		var nlist = [];
+		var flag	= router.flag;
+		var keys	= Object.keys(router.list);
+		var valus	= Object.values(router.list);
+		var len		= keys.length;
+		var nlist	= [];
 		
 		if(flag == "hash"){
 			for (var  i =0 ;i<len;i++) nlist.push({"id":FunUtil.common4hash({"type":"encode","key":(keys[i])}),"jid":FunUtil.common4hash({"type":"encode","key":("#"+valus[i])}), "page":"","state":""});
@@ -646,21 +683,14 @@
 		FunUtil.Global.Jids	  = router.list;
 		
 		FunUtil.register4Evet({"type":flag});
-		
 	};
-	
-	 
 	
 	FunUtil.common4Global  = function(data){
 		FunUtil.Global.id = data.id;
 		FunUtil.Global.name = data.name;
-		
 	};
 	
-	
-	
 	PageInfo.init4plug = function(data){
-		 
 		FunUtil.Global.plug = data.info; 
 	};
 	
@@ -680,23 +710,18 @@
 	 	var futil ={};
 	 	
 		futil.getJs =  function(param){
-			var require = param.require;
-			var keys = Object.keys(require);
-			var vals = Object.values(require);
-			var len  = keys.length;
-			var list = [];
-			
-			eval('var '+keys.join(",") +";");// 这个实在是没有办法
+			var require	= param.require;
+			var keys	= Object.keys(require);
+			var vals	= Object.values(require);
+			var len		= keys.length;
+			var list	= [];
 			
 			for(var i =0 ;i<len;i++) list.push(FunUtil.common4require(vals[i]));
 			
 			Promise.all(list).then(values => { 
-				  
-				
 				
 				FunUtil.common4Global(param.Global);
 				FunUtil.common4Router(param.Router);
-				
 				
 				var func=new function(){
 					   		
@@ -707,35 +732,20 @@
 			});
 		};
 		
-		
 		futil.getJs(data.info())
-		
-		
 	};
 	
 	PageInfo.init4config = function(data){
-		//加载配置信息丢入全局变量  (由于第一版是基于 Jquery 而言,所以会预加载Jquery)
 		
-		FunUtil.Global.config = data.info;
-		 
+		FunUtil.Global.config = data.info;//加载配置信息丢入全局变量  (由于第一版是基于 Jquery 而言,所以会预加载Jquery)
 	};
 	
 	
 	PageInfo.register = function(data){
 		
-		//在执行 之前 判断是否有require  如果有则 等待 require  全部结束后再执行
-		
-		//所有对象都通过注册进来
-		
-		if(data.type == "Start"){
-			PageInfo["init4"+data.type](data);			
-		}else{
-			
-			PageInfo["init4"+data.type](data);
-		}
-		
-		
+		PageInfo["init4"+data.type](data);//所有对象都通过注册进来
 	};
+	
 	PageInfo.FunUtil = FunUtil;
 	
 	/* 对外暴露 一个公共方法，
