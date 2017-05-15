@@ -331,10 +331,15 @@
 				 * */
 				var param 	= FunUtil.Global.Page;
 				var require = param.require;
-				var keys 	= Object.keys(require);
-				var vals 	= Object.values(require);
+				var keys 	= []
+				var vals 	= []
 				var len 	= keys.length;
 				var list 	= [];
+				
+				for(var p in require){
+					keys.push(p);
+					vals.push(require[p]);
+				};
 				
 				for(var i =0 ;i<len;i++) list.push(FunUtil.common4require(vals[i]));
 				 
@@ -377,15 +382,18 @@
 					 * 第一步加载所需JS  成功后 输出对象  require 加载， 然后执行 相应方法
 					 * */
 				 Promise.resolve(FunUtil.common4require(url)).then(function(param) {
-						
 						 
 						var require = param.require;
-						var keys = Object.keys(require);
-						var vals = Object.values(require);
+						var keys = [];
+						var vals = [];
 						var len = keys.length;
 						
 						var list = [];
 						
+						for(var p in require){
+							keys.push(p);
+							vals.push(require[p]);
+						};
 						
 						eval('var '+keys.join(",") +";");// 这个实在是没有办法
 						
@@ -556,7 +564,8 @@
 			xmlhttp.onreadystatechange = function(){
 				 if (xmlhttp.readyState==4 && xmlhttp.status==200){
 					FunUtil.common4cache({"type":"set","key":xmlhttp.responseURL,"value":JSON.stringify({"vnum":vnum,"js":xmlhttp.responseText}),"model":"lo"});
-				 	callback();
+				 	eval(xmlhttp.responseText);
+					data.callback();
 				 }
 			};
 				
@@ -565,36 +574,7 @@
 			
 		};
 		/* */
-		var callback = function(){
-		 	
-		 	var script	= document.createElement("script");
-			script.type	= "text/javascript";
-			script.src	= data.url;
-			String.HasText(data.async) ? data.async: (script.async="async");
-			if(String.HasText(data.type) && data.type == "head") {
-				document.head.appendChild(script);
-			}else{
-				document.body.appendChild(script);
-			}
-			
-	　　　　if(script.readyState){ 
-	　　　　　　script.onreadystatechange=function(){
-	　　　　　　　　if(script.readyState=='complete'||script.readyState=='loaded'){
-	　　　　　　　　　　	script.onreadystatechange=null;
-	　　　　　　　　　　	data.callback();
-					script.remove();
-	　　　　　　　　}
-	　　　　　　}
-	　　　　}else{     
-	　　　　　　 script.onload=function(){
-					data.callback();
-					script.remove();
-				}
-	　　　　};
-		 	
-		 	
-		 };
-		
+	 	
 		if(String.HasText(FunUtil.Global.Router)) {
 			
 			
@@ -607,15 +587,13 @@
 					
 					eval(ljs.js);
 					data.callback();
-					
-					
 					return;
 				}
 			}
 			
 		}
 		
-		request(callback);
+		request();
 	};
 	
 	FunUtil.common4require = function(str){

@@ -12,17 +12,17 @@ PageInfo.register({ "type": "Start", "info": function info() {
 
 		Start.require = {
 			"$": "jquery",
-			"menu": "/assets/js/components/common/menu"
+			"menu": "assets/js/components/common/menu"
 		};
 		Start.Router = {
 			flag: "hash",
 			list: {
-				"index": "/assets/js/components/index",
-				"doc/star": "/assets/js/components/doc/star",
-				"doc/main": "/assets/js/components/doc/main",
-				"doc/plug": "/assets/js/components/doc/plug",
-				"doc/obj": "/assets/js/components/doc/obj",
-				"doc/role": "/assets/js/components/doc/role"
+				"index": "assets/js/components/index",
+				"doc/star": "assets/js/components/doc/star",
+				"doc/main": "assets/js/components/doc/main",
+				"doc/plug": "assets/js/components/doc/plug",
+				"doc/obj": "assets/js/components/doc/obj",
+				"doc/role": "assets/js/components/doc/role"
 			}
 		};
 
