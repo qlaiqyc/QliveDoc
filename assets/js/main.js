@@ -12,7 +12,7 @@ PageInfo.register({ "type": "Start", "info": function info() {
 
 		Start.require = {
 			"$": "jquery",
-			"menu": "assets/js/components/common/menu"
+			"menu": "/assets/js/components/common/menu"
 		};
 		Start.Router = {
 			flag: "hash",
