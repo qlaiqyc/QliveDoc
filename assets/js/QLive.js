@@ -409,8 +409,8 @@
 							
 							FunUtil.Global.Router[nid].page = Router;
 							FunUtil.Global.Router[nid].state = "show";
-							$main.hide()
-							$main.append('<div class="'+id+'">'+Router.data().HtmUtil.layout()+'</div').fadeIn();
+							
+							$main.append('<div class="'+id+'">'+Router.data().HtmUtil.layout()+'</div').show();
 							console.log(FunUtil.Global.Router[nid].jid);
 							
 							Router.init();
@@ -441,7 +441,7 @@
 					Npage.state = "show";
 					FunUtil.Global.Router[nid] = Npage;
 					
-					$main.find("div."+id).fadeIn();
+					$main.find("div."+id).show();
 				}else{
 					execuFun.pub();				
 				}
@@ -468,7 +468,7 @@
 					FunUtil.Global.Router[nid] = Npage;
 					
 					
-					$main.find("div."+Npage.jid).fadeIn();
+					$main.find("div."+Npage.jid).show();
 				}else{
 				  	execuFun.pub();		
 				}
@@ -580,7 +580,7 @@
 			
 			var ljs = FunUtil.common4cache({"type":"get","key":data.url,"model":"lo"});
 		
-			if(String.HasText(ljs) && data.url.indexOf("layui") < 0 ){
+			if(String.HasText(ljs)){
 				
 				
 				if(ljs.vnum == vnum) {
